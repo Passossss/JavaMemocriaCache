@@ -30,7 +30,6 @@ class CacheSimulation {
         }
 
         int totalAcessos = hits + misses;
-        //double taxaHit = totalAcessos > 0 ? (double) hits / totalAcessos : 0;
         double taxaAcerto = totalAcessos > 0 ? (double) hits / totalAcessos : 0;
         double taxaAcertoPercentual = taxaAcerto * 100;
 
@@ -38,7 +37,6 @@ class CacheSimulation {
         System.out.println("Total de posições de memória acessadas: " + totalAcessos);
         System.out.println("Total de hits: " + hits);
         System.out.println("Total de misses: " + misses);
-        //System.out.println("Taxa de cache hit: " + taxaHit);
         System.out.printf("Taxa de acerto: %.2f%%\n", taxaAcertoPercentual);
     }
 }

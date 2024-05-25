@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class CacheSimulationGUI extends JFrame implements ActionListener {
+class CacheSimulationGUI extends JFrame implements ActionListener {
     private JTextField tamanhoCacheField;
     private JTextField posicoesMemoriaField;
+    private JTextField conjuntoSizeField;
     private JButton simularButton;
+    private JButton simularAssociativoButton;
 
     public CacheSimulationGUI() {
         setTitle("Simulação de Cache");
@@ -35,6 +37,9 @@ public class CacheSimulationGUI extends JFrame implements ActionListener {
         JLabel posicoesMemoriaLabel = new JLabel("Posições de Memória (separadas por vírgula):");
         posicoesMemoriaField = new JTextField(20);
 
+        JLabel conjuntoSizeLabel = new JLabel("Tamanho do Conjunto:");
+        conjuntoSizeField = new JTextField(10);
+
         JPanel tamanhoPanel = new JPanel();
         tamanhoPanel.setBackground(Color.LIGHT_GRAY);
         tamanhoPanel.add(tamanhoCacheLabel);
@@ -45,17 +50,29 @@ public class CacheSimulationGUI extends JFrame implements ActionListener {
         posicoesPanel.add(posicoesMemoriaLabel);
         posicoesPanel.add(posicoesMemoriaField);
 
-        simularButton = new JButton("Simular");
+        JPanel conjuntoPanel = new JPanel();
+        conjuntoPanel.setBackground(Color.LIGHT_GRAY);
+        conjuntoPanel.add(conjuntoSizeLabel);
+        conjuntoPanel.add(conjuntoSizeField);
+
+        simularButton = new JButton("Simular Mapeamento Direto");
         simularButton.setBackground(Color.GRAY);
         simularButton.setForeground(Color.WHITE);
         simularButton.addActionListener(this);
+
+        simularAssociativoButton = new JButton("Simular Mapeamento Associativo");
+        simularAssociativoButton.setBackground(Color.GRAY);
+        simularAssociativoButton.setForeground(Color.WHITE);
+        simularAssociativoButton.addActionListener(this);
 
         mainPanel.add(headerLabel);
         mainPanel.add(alunosLabel);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         mainPanel.add(tamanhoPanel);
         mainPanel.add(posicoesPanel);
+        mainPanel.add(conjuntoPanel);
         mainPanel.add(simularButton);
+        mainPanel.add(simularAssociativoButton);
 
         add(mainPanel);
         setVisible(true);
@@ -68,10 +85,30 @@ public class CacheSimulationGUI extends JFrame implements ActionListener {
             String posicoesMemoriaStr = posicoesMemoriaField.getText();
             try {
                 int tamanhoCache = Integer.parseInt(tamanhoCacheStr);
-                List<Integer> posicoesMemoriaAcessar = Arrays.stream(posicoesMemoriaStr.split(",")).map(String::trim).map(Integer::parseInt).collect(Collectors.toList());
+                List<Integer> posicoesMemoriaAcessar = Arrays.stream(posicoesMemoriaStr.split(","))
+                        .map(String::trim)
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
                 simularCache(tamanhoCache, posicoesMemoriaAcessar);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Digite números válidos para o tamanho da cache e posições de memória.", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+        } else if (e.getSource() == simularAssociativoButton) {
+            String tamanhoCacheStr = tamanhoCacheField.getText();
+            String conjuntoSizeStr = conjuntoSizeField.getText();
+            String posicoesMemoriaStr = posicoesMemoriaField.getText();
+            try {
+                int tamanhoCache = Integer.parseInt(tamanhoCacheStr);
+                int conjuntoSize = Integer.parseInt(conjuntoSizeStr);
+                List<Integer> posicoesMemoriaAcessar = Arrays.stream(posicoesMemoriaStr.split(","))
+                        .map(String::trim)
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+                simularCacheAssociativa(tamanhoCache, conjuntoSize, posicoesMemoriaAcessar);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Digite números válidos para o tamanho da cache, tamanho do conjunto e posições de memória.", "Erro", JOptionPane.ERROR_MESSAGE);
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -79,6 +116,11 @@ public class CacheSimulationGUI extends JFrame implements ActionListener {
     private void simularCache(int tamanhoCache, List<Integer> posicoesMemoriaAcessar) {
         CacheSimulation cacheSim = new CacheSimulation(tamanhoCache);
         cacheSim.mapeamentoDireto(posicoesMemoriaAcessar);
+    }
+
+    private void simularCacheAssociativa(int tamanhoCache, int conjuntoSize, List<Integer> posicoesMemoriaAcessar) {
+        CacheAssociativoConjunto cacheSim = new CacheAssociativoConjunto(tamanhoCache, conjuntoSize);
+        cacheSim.mapeamentoAssociativoConjunto(posicoesMemoriaAcessar);
     }
 
     public static void main(String[] args) {
