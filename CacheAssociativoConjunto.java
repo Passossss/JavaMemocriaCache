@@ -20,22 +20,8 @@ class CacheAssociativoConjunto {
     }
 
     private void imprimirCacheAssociativa() {
-        System.out.println("Tamanho da Cache: " + tamanhoCache);
-        System.out.println("Pos Cache | Bloco de Memória (LRU)");
-        for (Map.Entry<Integer, Deque<Integer>> entry : cache.entrySet()) {
-            int posCache = entry.getKey() * conjuntoSize;
-            System.out.printf("         %d| ", posCache);
-            int index = 0;
-            for (Integer bloco : entry.getValue()) {
-                if (index == conjuntoSize - 1) {
-                    System.out.printf("%d (LRU) ", bloco);
-                } else {
-                    System.out.printf("%d ", bloco);
-                }
-                index++;
-            }
-            System.out.println();
-        }
+
+
     }
 
     public void mapeamentoAssociativoConjunto(List<Integer> posicoesMemoriaAcessar) {
@@ -43,29 +29,10 @@ class CacheAssociativoConjunto {
         int misses = 0;
 
         System.out.println("Estado Inicial da Cache:");
-        imprimirCacheAssociativa();
 
-        for (int posicaoMemoria : posicoesMemoriaAcessar) {
-            int conjunto = posicaoMemoria % (tamanhoCache / conjuntoSize);
-            Deque<Integer> blocos = cache.get(conjunto);
 
-            if (blocos.contains(posicaoMemoria)) {
-                hits++;
-                System.out.println("Hit! Endereço " + posicaoMemoria + " já está na Cache.");
-                blocos.remove(posicaoMemoria);
-                blocos.addFirst(posicaoMemoria);
-            } else {
-                misses++;
-                System.out.println("Miss! Endereço " + posicaoMemoria + " não está na Cache. Adicionando...");
-                if (blocos.size() == conjuntoSize) {
-                    blocos.removeLast();
-                }
-                blocos.addFirst(posicaoMemoria);
-            }
 
-            System.out.println("Cache Atualizada:");
-            imprimirCacheAssociativa();
-        }
+
 
         int totalAcessos = hits + misses;
         double taxaHit = hits / (double) totalAcessos;
