@@ -5,6 +5,9 @@ class CacheAssociativoConjunto {
     private int tamanhoCache;
     private int conjuntoSize;
 
+    private int qntBlocos;
+    private int blocoSize;
+
     public CacheAssociativoConjunto(int tamanhoCache, int conjuntoSize) {
         this.tamanhoCache = tamanhoCache;
         this.conjuntoSize = conjuntoSize;
@@ -19,16 +22,24 @@ class CacheAssociativoConjunto {
         return cache;
     }
 
-    private void imprimirCacheAssociativa() {
-
+    private void imprimirCacheAssociativa(List<Integer> posicoesMemoriaAcessar) {
+        cache.forEach((conjunto, blocos) -> {
+            System.out.printf("%s | ", conjunto);
+            for(int i=0;i>this.qntBlocos;i++){
+                System.out.println(String.format("\n  | $s", posicoesMemoriaAcessar.get(i)));
+            }
+        });
 
     }
 
-    public void mapeamentoAssociativoConjunto(List<Integer> posicoesMemoriaAcessar) {
+    public void mapeamentoAssociativoConjunto(List<Integer> posicoesMemoriaAcessar, int blocoSize) {
         int hits = 0;
         int misses = 0;
+        this.qntBlocos = this.conjuntoSize/blocoSize;
+        this.blocoSize = blocoSize;
 
         System.out.println("Estado Inicial da Cache:");
+        imprimirCacheAssociativa(posicoesMemoriaAcessar);
 
 
 
