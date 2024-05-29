@@ -29,7 +29,7 @@ class CacheSimulation {
             cache.imprimirCache();
         }
 
-        int totalAcessos = hits + misses;
+        int totalAcessos = misses;
         double taxaAcerto = totalAcessos > 0 ? (double) hits / totalAcessos : 0;
         double taxaAcertoPercentual = taxaAcerto * 100;
 
